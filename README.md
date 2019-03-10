@@ -62,17 +62,3 @@ and Heartbeat로 구성된 데모용 Elastic Stack이 생성됩니다.
 
 `elastic`에 로그인하기 위한 자동 생성된 패스워드는 설치시 표시된 패스워드를 사용합니다.
 
-
-
-```
-Rpb0FxJR9L2zcaceJvK+Bg==
-
-
-setup_1  | ERROR: for elasticsearch  Cannot create container for service elasticsearch: invalid mount config for type "bind": bind source path does not exist: /Users/yongho/Works/Projects/stack-docker/config/ssl/ca/ca.crt
-setup_1  |
-setup_1  | ERROR: for elasticsearch  Cannot create container for service elasticsearch: invalid mount config for type "bind": bind source path does not exist: /Users/yongho/Works/Projects/stack-docker/config/ssl/ca/ca.crt
-setup_1  | Encountered errors while bringing up the project.
-setup_1  | Setup completed successfully. To start the stack please run:
-setup_1  | 	 docker-compose up -d
-```
-
