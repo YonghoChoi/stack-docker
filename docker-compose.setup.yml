@@ -11,8 +11,8 @@ services:
     environment: ['ELASTIC_PASSWORD=${ELASTIC_PASSWORD}']
     working_dir: '/config'
     volumes:
-      - './config:/config'
-      - './scripts/setup-elasticsearch.sh:/usr/local/bin/setup-elasticsearch.sh:ro'
+      - '${PWD}/config:/config'
+      - '${PWD}/scripts/setup-elasticsearch.sh:/usr/local/bin/setup-elasticsearch.sh:ro'
 
   setup_kibana:
     image: docker.elastic.co/kibana/kibana:${TAG}
@@ -21,9 +21,9 @@ services:
     environment: ['ELASTIC_PASSWORD=${ELASTIC_PASSWORD}']
     working_dir: '/config'
     volumes:
-      - './config:/config'
-      - './scripts/setup-kibana.sh:/usr/local/bin/setup-kibana.sh:ro'
-      - './config/ssl/ca/ca.crt:/usr/share/kibana/config/ca/ca.crt'
+      - '${PWD}/config:/config'
+      - '${PWD}/scripts/setup-kibana.sh:/usr/local/bin/setup-kibana.sh:ro'
+      - '${PWD}/config/ssl/ca/ca.crt:/usr/share/kibana/config/ca/ca.crt'
     depends_on: ['elasticsearch']
     networks: ['stack']
 
@@ -34,9 +34,9 @@ services:
     environment: ['ELASTIC_PASSWORD=${ELASTIC_PASSWORD}']
     working_dir: '/config'
     volumes:
-      - './config:/config'
-      - './scripts/setup-logstash.sh:/usr/local/bin/setup-logstash.sh:ro'
-      - './config/ssl/ca/ca.crt:/usr/share/logstash/config/ca/ca.crt'
+      - '${PWD}/config:/config'
+      - '${PWD}/scripts/setup-logstash.sh:/usr/local/bin/setup-logstash.sh:ro'
+      - '${PWD}/config/ssl/ca/ca.crt:/usr/share/logstash/config/ca/ca.crt'
     depends_on: ['elasticsearch']
     networks: ['stack']
 
@@ -47,10 +47,10 @@ services:
     pid: host
     cap_add: ['AUDIT_CONTROL', 'AUDIT_READ']
     volumes:
-      - './config:/config'
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
-      - './config/auditbeat/auditbeat.yml:/usr/share/auditbeat/auditbeat.yml'
-      - './config/ssl/ca/ca.crt:/usr/share/auditbeat/certs/ca/ca.crt'
+      - '${PWD}/config:/config'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/config/auditbeat/auditbeat.yml:/usr/share/auditbeat/auditbeat.yml'
+      - '${PWD}/config/ssl/ca/ca.crt:/usr/share/auditbeat/certs/ca/ca.crt'
     command: ['/bin/bash', '-c', 'cat /usr/local/bin/setup-beat.sh | tr -d "\r" | bash -s auditbeat']
     environment: ['ELASTIC_PASSWORD=${ELASTIC_PASSWORD}']
     networks: ['stack']
@@ -61,10 +61,10 @@ services:
     container_name: setup_filebeat
     user: root
     volumes:
-      - './config:/config'
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
-      - './config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml'
-      - './config/ssl/ca/ca.crt:/usr/share/filebeat/certs/ca/ca.crt'
+      - '${PWD}/config:/config'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml'
+      - '${PWD}/config/ssl/ca/ca.crt:/usr/share/filebeat/certs/ca/ca.crt'
     command: ['/bin/bash', '-c', 'cat /usr/local/bin/setup-beat.sh | tr -d "\r" | bash -s filebeat']
     environment: ['ELASTIC_PASSWORD=${ELASTIC_PASSWORD}']
     networks: ['stack']
@@ -75,10 +75,10 @@ services:
     container_name: setup_heartbeat
     user: root
     volumes:
-      - './config:/config'
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
-      - './config/heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml'
-      - './config/ssl/ca/ca.crt:/usr/share/heartbeat/certs/ca/ca.crt'
+      - '${PWD}/config:/config'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/config/heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml'
+      - '${PWD}/config/ssl/ca/ca.crt:/usr/share/heartbeat/certs/ca/ca.crt'
     command: ['/bin/bash', '-c', 'cat /usr/local/bin/setup-beat.sh | tr -d "\r" | bash -s heartbeat']
     environment: ['ELASTIC_PASSWORD=${ELASTIC_PASSWORD}']
     networks: ['stack']
@@ -89,10 +89,10 @@ services:
     container_name: setup_metricbeat
     user: root
     volumes:
-      - './config:/config'
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
-      - './config/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml'
-      - './config/ssl/ca/ca.crt:/usr/share/metricbeat/certs/ca/ca.crt'
+      - '${PWD}/config:/config'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/config/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml'
+      - '${PWD}/config/ssl/ca/ca.crt:/usr/share/metricbeat/certs/ca/ca.crt'
     command: ['/bin/bash', '-c', 'cat /usr/local/bin/setup-beat.sh | tr -d "\r" | bash -s metricbeat']
     environment: ['ELASTIC_PASSWORD=${ELASTIC_PASSWORD}']
     networks: ['stack']
@@ -105,10 +105,10 @@ services:
     cap_add: ['NET_RAW', 'NET_ADMIN']
     command: ['/bin/bash', '-c', 'cat /usr/local/bin/setup-beat.sh | tr -d "\r" | bash -s packetbeat']
     volumes:
-      - './config:/config'
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
-      - './config/packetbeat/packetbeat.yml:/usr/share/packetbeat/packetbeat.yml'
-      - './config/ssl/ca/ca.crt:/usr/share/packetbeat/certs/ca/ca.crt'
+      - '${PWD}/config:/config'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/config/packetbeat/packetbeat.yml:/usr/share/packetbeat/packetbeat.yml'
+      - '${PWD}/config/ssl/ca/ca.crt:/usr/share/packetbeat/certs/ca/ca.crt'
     environment: ['ELASTIC_PASSWORD=${ELASTIC_PASSWORD}']
     networks: ['stack']
     depends_on: ['kibana']
@@ -119,10 +119,10 @@ services:
     user: root
     command: ['/bin/bash', '-c', 'cat /usr/local/bin/setup-beat.sh | tr -d "\r" | bash -s apm-server']
     volumes:
-      - './config:/config'
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
-      - './config/apm-server/apm-server.yml:/usr/share/apm-server/apm-server.yml'
-      - './config/ssl/ca/ca.crt:/usr/share/apm-server/certs/ca/ca.crt'
+      - '${PWD}/config:/config'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/config/apm-server/apm-server.yml:/usr/share/apm-server/apm-server.yml'
+      - '${PWD}/config/ssl/ca/ca.crt:/usr/share/apm-server/certs/ca/ca.crt'
     environment: ['ELASTIC_PASSWORD=${ELASTIC_PASSWORD}']
     networks: ['stack']
     depends_on: ['kibana']

@@ -35,7 +35,7 @@ services:
     networks: ['stack']
     volumes:
       - 'es_data:/usr/share/elasticsearch/data'
-      - './scripts/setup-users.sh:/usr/local/bin/setup-users.sh:ro'
+      - '${PWD}/scripts/setup-users.sh:/usr/local/bin/setup-users.sh:ro'
     healthcheck:
       test: curl --cacert /usr/share/elasticsearch/config/certs/ca/ca.crt -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
       interval: 30s
@@ -100,7 +100,7 @@ services:
     # Auditbeat must run in the main process namespace.
     pid: host
     volumes:
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
     networks: ['stack']
     depends_on: ['elasticsearch', 'kibana']
     healthcheck:
@@ -124,7 +124,7 @@ services:
       - source: ca.crt
         target: /usr/share/filebeat/certs/ca/ca.crt
     volumes:
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
     networks: ['stack']
     depends_on: ['elasticsearch', 'kibana']
     healthcheck:
@@ -145,7 +145,7 @@ services:
       - source: ca.crt
         target: /usr/share/heartbeat/certs/ca/ca.crt
     volumes:
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
     networks: ['stack']
     depends_on: ['elasticsearch', 'kibana']
     healthcheck:
@@ -174,7 +174,7 @@ services:
       - source: ca.crt
         target: /usr/share/metricbeat/certs/ca/ca.crt
     volumes:
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
     networks: ['stack']
     depends_on: ['elasticsearch', 'kibana']
     healthcheck:
@@ -208,7 +208,7 @@ services:
       - source: ca.crt
         target: /usr/share/packetbeat/certs/ca/ca.crt
     volumes:
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
     depends_on: ['elasticsearch', 'kibana']
     healthcheck:
       test: packetbeat test config
@@ -230,7 +230,7 @@ services:
       - source: ca.crt
         target: /usr/share/apm-server/certs/ca/ca.crt
     volumes:
-      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+      - '${PWD}/scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
     depends_on: ['elasticsearch', 'kibana']
     healthcheck:
       test: curl --cacert /usr/share/elasticsearch/config/certs/ca/ca.crt -s https://localhost:8200/healthcheck >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
@@ -245,52 +245,52 @@ volumes:
 
 secrets:
   ca.crt:
-    file: ./config/ssl/ca/ca.crt
+    file: ${PWD}/config/ssl/ca/ca.crt
   logstash.yml:
-    file: ./config/logstash/logstash.yml
+    file: ${PWD}/config/logstash/logstash.yml
   logstash.keystore:
-    file: ./config/logstash/logstash.keystore
+    file: ${PWD}/config/logstash/logstash.keystore
   logstash.conf:
-    file: ./config/logstash/pipeline/logstash.conf
+    file: ${PWD}/config/logstash/pipeline/logstash.conf
   elasticsearch.yml:
-    file: ./config/elasticsearch/elasticsearch.yml
+    file: ${PWD}/config/elasticsearch/elasticsearch.yml
   elasticsearch.keystore:
-    file: ./config/elasticsearch/elasticsearch.keystore
+    file: ${PWD}/config/elasticsearch/elasticsearch.keystore
   elasticsearch.key:
-    file: ./config/elasticsearch/elasticsearch.key
+    file: ${PWD}/config/elasticsearch/elasticsearch.key
   elasticsearch.crt:
-    file: ./config/elasticsearch/elasticsearch.crt
+    file: ${PWD}/config/elasticsearch/elasticsearch.crt
   elasticsearch.p12:
-    file: ./config/elasticsearch/elasticsearch.p12
+    file: ${PWD}/config/elasticsearch/elasticsearch.p12
   kibana.yml:
-    file: ./config/kibana/kibana.yml
+    file: ${PWD}/config/kibana/kibana.yml
   kibana.keystore:
-    file: ./config/kibana/kibana.keystore
+    file: ${PWD}/config/kibana/kibana.keystore
   kibana.key:
-    file: ./config/kibana/kibana.key
+    file: ${PWD}/config/kibana/kibana.key
   kibana.crt:
-    file: ./config/kibana/kibana.crt
+    file: ${PWD}/config/kibana/kibana.crt
   auditbeat.yml:
-    file: ./config/auditbeat/auditbeat.yml
+    file: ${PWD}/config/auditbeat/auditbeat.yml
   auditbeat.keystore:
-    file: ./config/auditbeat/auditbeat.keystore
+    file: ${PWD}/config/auditbeat/auditbeat.keystore
   filebeat.yml:
-    file: ./config/filebeat/filebeat.yml
+    file: ${PWD}/config/filebeat/filebeat.yml
   filebeat.keystore:
-    file: ./config/filebeat/filebeat.keystore
+    file: ${PWD}/config/filebeat/filebeat.keystore
   heartbeat.yml:
-    file: ./config/heartbeat/heartbeat.yml
+    file: ${PWD}/config/heartbeat/heartbeat.yml
   heartbeat.keystore:
-    file: ./config/heartbeat/heartbeat.keystore
+    file: ${PWD}/config/heartbeat/heartbeat.keystore
   metricbeat.yml:
-    file: ./config/metricbeat/metricbeat.yml
+    file: ${PWD}/config/metricbeat/metricbeat.yml
   metricbeat.keystore:
-    file: ./config/metricbeat/metricbeat.keystore
+    file: ${PWD}/config/metricbeat/metricbeat.keystore
   packetbeat.yml:
-    file: ./config/packetbeat/packetbeat.yml
+    file: ${PWD}/config/packetbeat/packetbeat.yml
   packetbeat.keystore:
-    file: ./config/packetbeat/packetbeat.keystore
+    file: ${PWD}/config/packetbeat/packetbeat.keystore
   apm-server.yml:
-    file: ./config/apm-server/apm-server.yml
+    file: ${PWD}/config/apm-server/apm-server.yml
   apm-server.keystore:
-    file: ./config/apm-server/apm-server.keystore
+    file: ${PWD}/config/apm-server/apm-server.keystore
